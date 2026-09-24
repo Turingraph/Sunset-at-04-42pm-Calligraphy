@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include "MLX42.h"
-# include <fcntl.h>
 
 /* ************************************************************************** */
 /* src/utils/type/type.h */
@@ -247,45 +246,6 @@ typedef struct t_matrix
 	size_t	col;
 	float	*arr;
 }	t_matrix;
-
-/* ************************************************************************** */
-/* *** src/input/get_next_line/ *** */
-/* ************************************************************************** */
-
-typedef enum t_file_mode
-{
-	READ = O_RDONLY,
-	APPEND = O_WRONLY | O_CREAT | O_APPEND,
-}	t_file_mode;
-
-/**
- * Read the next line from a file descriptor.
- * Preserves unread text between calls when continuation is enabled.
- *
- * time/space: O(n) / O(n)
- *
- * @param fd file descriptor to read from
- * @param is_continue whether unread text should be preserved for the next call
- *
- * @return newly allocated string ending at '\n', or NULL on allocation failure
- */
-char			*get_next_line(int fd, bool is_continue);
-
-/**
- * Open a file using an optional directory and file name.
- * Uses whichever path argument is provided when the other is NULL.
- * Concatenates both paths when both are provided.
- *
- * time/space: O(n) / O(n)
- *
- * @param file_name name or path of the file to open
- * @param dir directory or path prefix of the file
- * @param file_mode file access mode
- *
- * @return file descriptor on success, or -1 on failure
- */
-int				open_dir_file(const char *file_name,
-					const char *dir, t_file_mode file_mode);
 
 /* ************************************************************************** */
 /* *** src/input/load/ *** */
@@ -858,7 +818,7 @@ bool		is_binary_search_product_odd(const t_table_fdf *dst, size_t index);
  * @return true if the scaled maximum Collatz point is odd,
  * false otherwise.
  */
-bool		is_binary_search_andmod(const t_table_fdf *dst, size_t index);
+bool		is_binary_search_ormod(const t_table_fdf *dst, size_t index);
 
 /**
  * Find the maximum value reached by the Collatz sequence of an input.
@@ -912,7 +872,7 @@ bool		is_collatz_odd_product(const t_table_fdf *dst, size_t index);
  * @return true if the scaled maximum Collatz point is odd,
  * false otherwise.
  */
-bool		is_collatz_odd_andmod(const t_table_fdf *dst, size_t index);
+bool		is_collatz_odd_ormod(const t_table_fdf *dst, size_t index);
 
 /**
  * Compute z' = complex_func(the complex coordinate of the cell).
@@ -1000,7 +960,7 @@ bool		is_oddlength(const t_table_fdf *dst, size_t index);
  *
  * @return true if z.re is even and z.im is even, false otherwise.
  */
-bool		is_andmod_func(const t_table_fdf *dst, size_t index,
+bool		is_ormod_func(const t_table_fdf *dst, size_t index,
 				t_complex (*complex_func)(t_complex a), float zoom);
 
 /**
@@ -1078,7 +1038,7 @@ bool		is_oddlength_x6(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_x2(const t_table_fdf *dst, size_t index);
+bool		is_ormod_x2(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether the ax^3 and ay^3 of the cell is an odd value.
@@ -1090,7 +1050,7 @@ bool		is_andmod_x2(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_x3(const t_table_fdf *dst, size_t index);
+bool		is_ormod_x3(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether the ax^4 and ay^4 of the cell is an odd value.
@@ -1102,7 +1062,7 @@ bool		is_andmod_x3(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_x4(const t_table_fdf *dst, size_t index);
+bool		is_ormod_x4(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether the ax^5 and ay^5 of the cell is an odd value.
@@ -1114,7 +1074,7 @@ bool		is_andmod_x4(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_x5(const t_table_fdf *dst, size_t index);
+bool		is_ormod_x5(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether the ax^6 and ay^6 of the cell is an odd value.
@@ -1126,7 +1086,7 @@ bool		is_andmod_x5(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_x6(const t_table_fdf *dst, size_t index);
+bool		is_ormod_x6(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether constant times magnitude of the square of a cell's
@@ -1153,34 +1113,6 @@ bool		is_oddlength_x2shadow(const t_table_fdf *dst, size_t index);
  * @return true if the calculated value is odd, false otherwise.
  */
 bool		is_oddlength_x3shadow(const t_table_fdf *dst, size_t index);
-
-/**
- * Check whether the ax^2 and ay^2 of the cell is an odd value.
- *
- * time/space: O(1) / O(1)
- *
- * status: public api
- *
- * @param dst FDF table to check
- * @param index index of the cell to check
- *
- * @return true if the calculated value is odd, false otherwise.
- */
-bool	is_andmod_x2shadow(const t_table_fdf *dst, size_t index);
-
-/**
- * Check whether the ax^3 and ay^3 of the cell is an odd value.
- *
- * time/space: O(1) / O(1)
- *
- * status: public api
- *
- * @param dst FDF table to check
- * @param index index of the cell to check
- *
- * @return true if the calculated value is odd, false otherwise.
- */
-bool	is_andmod_x3shadow(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether the magnitude of the sin of a cell's
@@ -1219,7 +1151,7 @@ bool		is_oddlength_cos(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_sin(const t_table_fdf *dst, size_t index);
+bool		is_ormod_sin(const t_table_fdf *dst, size_t index);
 
 /**
  * Check whether the magnitude of the cos of a cell's
@@ -1232,7 +1164,7 @@ bool		is_andmod_sin(const t_table_fdf *dst, size_t index);
  *
  * @return true if the calculated value is odd, false otherwise.
  */
-bool		is_andmod_cos(const t_table_fdf *dst, size_t index);
+bool		is_ormod_cos(const t_table_fdf *dst, size_t index);
 
 /* ************************************************************************** */
 /* *** src/editor/paint/ *** */
@@ -1392,26 +1324,6 @@ void		space_coloring_max_xy(t_table_fdf *dst);
  * @param dst FDF table to modify
  */
 void		space_coloring_min_xy(t_table_fdf *dst);
-
-/* ************************************************************************** */
-/* *** src/graphic_mlx/raster/ *** */
-/* ************************************************************************** */
-
-/**
- * Describes the rendering properties of a 2D motif or FDF drawing.
- * 
- * color stores the 32-bit drawing color. type determines how the associated
- * geometry or FDF data is rendered. thickness controls the size of the
- * rendered primitive where applicable.
- * 
- * @param color 32-bit drawing color
- * @param thickness size parameter used by the selected rendering type
- */
-typedef struct s_ink32
-{
-	int32_t		color;
-	size_t		thickness;
-}	t_ink32;
 
 /* ************************************************************************** */
 /* *** src/graphic_mlx/fdf/ *** */
@@ -1675,7 +1587,7 @@ typedef struct s_render_style
 void	view_fdf(t_fdf *fdf, t_render_style artstyle);
 
 /* ************************************************************************** */
-/* *** src/graphic_mlx/motif/ *** */
+/* *** src/graphic_mlx/window/ *** */
 /* ************************************************************************** */
 
 /**
