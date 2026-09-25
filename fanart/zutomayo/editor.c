@@ -7,14 +7,12 @@ int	main(void)
 	t_table_fdf	table_c;
 	size_t		half_dim;
 	int			output_fd;
-	char		*dst_dir = "unit_test/editor/convolve/input_ascii/";
-	char		*src_dir = "input_examples/ascii/";
-	char		*input = "fanart/zutomayo/input/figlet.txt";
-	char		*output = "fanart/zutomayo/input/convolve.txt";
+	char		*input_dir = "fanart/zutomayo/input/figlet.txt";
+	char		*output_dir = "fanart/zutomayo/input/convolve.txt";
 
 	half_dim = 5;
-	output_fd = open_dir_file(output, NULL, APPEND);
-	table_a = open_table_fdf_file(input, src_dir,
+	output_fd = open_dir_file(output_dir, NULL, APPEND);
+	table_a = open_table_fdf_file(input_dir, NULL,
 			parse_ascii_line_cheche01, false);
 	table_b = scale_dimension_fdf(&table_a, 3, 3);
 	table_c = convolve_fdf(&table_b, NULL, half_dim);
@@ -25,3 +23,6 @@ int	main(void)
 	return (0);
 }
 
+/*
+valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/zutomayo/editor.out
+*/

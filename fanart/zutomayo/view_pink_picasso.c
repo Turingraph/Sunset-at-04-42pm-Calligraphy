@@ -9,13 +9,13 @@ t_gradient	init_white_noise()
 	dst.cell_channel = D7_HEIGHT;
 	dst.input_start = 0;
 	dst.input_end = 0;
-	dst.rgba_start.r = 0;
-	dst.rgba_start.g = 0;
-	dst.rgba_start.b = 0;
+	dst.rgba_start.r = 14;
+	dst.rgba_start.g = 9;
+	dst.rgba_start.b = 15;
 	dst.rgba_start.a = 255;
-	dst.rgba_end.r = 0;
-	dst.rgba_end.g = 0;
-	dst.rgba_end.b = 0;
+	dst.rgba_end.r = 14;
+	dst.rgba_end.g = 9;
+	dst.rgba_end.b = 15;
 	dst.rgba_end.a = 255;
 	return (dst);
 }
@@ -75,13 +75,13 @@ int	main(int len, char **str)
 		return (0);
 	}
 	style.background_color = f_rgba_to_int32(0, 0, 0, 255);
-	style.line_thickness = 1;
-	style.artist = E_TOBY_FOX;
+	style.line_thickness = 2;
+	style.artist = E_PICASSO;
 	color_cells_gradient(&table, init_ztmy_studyme(), true);
 	color_cells_gradient(&table, init_ztmy_timeleft(), true);
 	scale_multiplication_fdf(&table, 1.0 / 3.0, HEIGHT);
 	color_cells_gradient(&table, init_white_noise(), true);
-	output = init_fdf(&table, NULL, 1.0);
+	output = init_fdf(&table, projection_isometric, 1.0);
 	view_fdf(&output, style);
 	free_table_fdf(&table);
 	free_fdf(&output);
@@ -89,5 +89,6 @@ int	main(int len, char **str)
 }
 
 /*
-./out/fanart/zutomayo/display.out fanart/zutomayo/input/convolve.txt
+valgrind --leak-check=full --show-leak-kinds=all 
+./out/fanart/zutomayo/view_pink.out fanart/zutomayo/input/convolve.txt
 */
