@@ -5,8 +5,8 @@ int	main(void)
 	t_table_fdf	table_a;
 	t_table_fdf	table_c;
 	int			output_fd;
-	char		*input_dir = "fanart/awake/input/gauss.txt";
-	char		*output_dir = "fanart/awake/input/sharp.txt";
+	char		*input_dir = "fanart/suisei/input/gauss.txt";
+	char		*output_dir = "fanart/suisei/input/sharp.txt";
 	float		*ker2;
 
 	ker2 = edge_kernel(1, 10, 1, 0);
@@ -24,5 +24,5 @@ int	main(void)
 }
 
 /*
-valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/awake/sharp.out
+valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/suisei/sharp.out
 */

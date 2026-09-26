@@ -5,8 +5,8 @@ int	main(void)
 	t_table_fdf	table_a;
 	t_table_fdf	table_b;
 	int			output_fd;
-	char		*input_dir = "fanart/awake/input/scale_dim_edit.txt";
-	char		*output_dir = "fanart/awake/input/gauss.txt";
+	char		*input_dir = "fanart/suisei/input/scale_dim_edit.txt";
+	char		*output_dir = "fanart/suisei/input/gauss.txt";
 	t_matrix	ker;
 	size_t		ker_dim;
 
@@ -29,5 +29,5 @@ int	main(void)
 }
 
 /*
-valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/awake/convolve.out
+valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/suisei/convolve.out
 */

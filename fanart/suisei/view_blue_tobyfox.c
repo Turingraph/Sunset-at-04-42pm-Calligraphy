@@ -1,6 +1,5 @@
 #include "../../include/sunset442pm.h"
 
-
 // time : O(1)
 // space: O(1)
 t_gradient	init_white_noise()
@@ -64,15 +63,13 @@ t_gradient	init_caramel_pain()
 int	main(int len, char **str)
 {
 	t_table_fdf		table;
-	t_table_fdf		table2;
 	t_table_fdf		non_euclidean;
 	t_fdf			output;
 	t_render_style	style;
 
 	if (len < 2)
 		return (0);
-	table2 = open_table_fdf_file(str[1], NULL, parse_ascii_line_cheche01, true);
-	table = scale_dimension_fdf(&table2, 2, 2);
+	table = open_table_fdf_file(str[1], NULL, parse_ascii_line_cheche01, true);
 	if (table.col * table.row == 0)
 	{
 		free_table_fdf(&table);
@@ -83,26 +80,22 @@ int	main(int len, char **str)
 	non_euclidean = init_table_fdf(table.row, table.col, true);
 	paint_space(&non_euclidean, HEIGHT, cell_metric_pythagoras);
 	style.background_color = f_rgba_to_int32(70, 155, 178, 255);
-	style.line_thickness = 4;
+	style.line_thickness = 5;
 	style.artist = E_TOBY_FOX;
 	scale_multiplication_fdf(&table, -1.0, HEIGHT);
 	scale_positive_fdf(&table);
 	color_cells_gradient(&table, init_suisei(), true);
 	color_cells_gradient(&table, init_caramel_pain(), true);
 	color_cells_gradient(&table, init_white_noise(), true);
-	set_cells_color(&table, 221, RED, is_boundary_fdf);
-	set_cells_color(&table, 212, GREEN, is_boundary_fdf);
-	set_cells_color(&table, 35, BLUE, is_boundary_fdf);
-	scale_multiplication_fdf(&table, 1.0 / 25.0, HEIGHT);
+	scale_multiplication_fdf(&table, 1.0 / 50.0, HEIGHT);
 	output = init_fdf(&table, NULL, 1.0);
 	view_fdf(&output, style);
 	free_table_fdf(&table);
-	free_table_fdf(&table2);
 	free_fdf(&output);
 	return (0);
 }
 
 /*
 valgrind --leak-check=full --show-leak-kinds=all 
-./out/fanart/awake/view_blue_firefox.out fanart/awake/input/sharp_edit.txt
+./out/fanart/suisei/view_blue_tobyfox.out fanart/suisei/input/sharp_edit.txt
 */

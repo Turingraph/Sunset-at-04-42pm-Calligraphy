@@ -1,9 +1,14 @@
 CC = cc -Wall -Wextra -Werror
-SRC_awake = $(wildcard fanart/awake/*.c)
+SRC_motif = $(wildcard improvise/motif/*.c)
+SRC_wood = $(wildcard improvise/wood/*.c)
+SRC_non_euclidean = $(wildcard improvise/non_euclidean/*.c)
+SRC_suisei = $(wildcard fanart/suisei/*.c)
 SRC_zutomayo = $(wildcard fanart/zutomayo/*.c)
-SRC_555 = $(wildcard improvise/thaijoke/*.c)
 # SRC_3b1b = $(wildcard fanart/3b1b/*.c)
-SRC_artworks = $(SRC_zutomayo) $(SRC_555) $(SRC_awake)
+SRC_improvise = $(SRC_non_euclidean) $(SRC_wood) $(SRC_motif)
+SRC_fanart = $(SRC_zutomayo) $(SRC_suisei)
+SRC_artworks = $(SRC_fanart) $(SRC_improvise)
+
 OBJ_artworks = $(patsubst %.c, obj/%.o, $(SRC_artworks))
 OUT_artworks = $(patsubst %.c, out/%.out, $(SRC_artworks))
 

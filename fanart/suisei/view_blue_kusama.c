@@ -98,5 +98,5 @@ int	main(int len, char **str)
 
 /*
 valgrind --leak-check=full --show-leak-kinds=all 
-./out/fanart/awake/view_blue_kusama.out fanart/awake/input/sharp_edit.txt
+./out/fanart/suisei/view_blue_kusama.out fanart/suisei/input/sharp_edit.txt
 */
