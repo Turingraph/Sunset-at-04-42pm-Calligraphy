@@ -11,7 +11,7 @@ int	main(void)
 	char		*output_dir = "fanart/zutomayo/input/convolve.txt";
 
 	half_dim = 5;
-	output_fd = open_dir_file(output_dir, NULL, APPEND);
+	output_fd = open_dir_file(output_dir, NULL, E_WRITE);
 	table_a = open_table_fdf_file(input_dir, NULL,
 			parse_ascii_line_cheche01, false);
 	table_b = scale_dimension_fdf(&table_a, 3, 3);

@@ -254,8 +254,8 @@ t_matrix	outer_product_matrix(const float *vec_v,
 
 typedef enum t_file_mode
 {
-	READ = O_RDONLY,
-	APPEND = O_WRONLY | O_CREAT | O_APPEND,
+	E_READ = O_RDONLY,
+	E_WRITE = O_WRONLY,
 }	t_file_mode;
 
 /**
@@ -272,12 +272,13 @@ typedef enum t_file_mode
 char			*get_next_line(int fd, bool is_continue);
 
 /**
- * Open a file using an optional directory and file name.
+ * Open a file using an optional directory and file name
+ * as [directory/file_name].
  * Uses whichever path argument is provided when the other is NULL.
  * Concatenates both paths when both are provided.
  *
  * time/space: O(n) / O(n)
- *
+ * 
  * @param file_name name or path of the file to open
  * @param dir directory or path prefix of the file
  * @param file_mode file access mode
@@ -771,6 +772,18 @@ t_table_fdf	convolve_fdf(const t_table_fdf *src, float *kernel,
 				size_t dim);
 
 /**
+ * Create a 1D Gaussian Blur kernel.
+ *
+ * time/space: O(n) / O(n)
+ *
+ * @param half_dim the half dimension of the kernel.
+ * @param std standard deviation arguments.
+ * @return allocated 1D kernel with 2 * half_dim + 1 items,
+ * or NULL if allocation fails
+ */
+float	*gaussian_kernel_1d(size_t half_dim, float std);
+
+/**
  * Create a 2D Blur Gaussian kernel from two 1D Gaussian kernels.
  *
  * time/space: O(n^2) / O(n^2)
@@ -786,6 +799,57 @@ t_table_fdf	convolve_fdf(const t_table_fdf *src, float *kernel,
  *  for more details
  */
 float	*gaussian_kernel(size_t half_dim, float std_1, float std_2);
+
+/**
+ * Create a 1D kernel with an inner region and an outer region.
+ *
+ * The inner region is centered on the kernel and uses inner_num.
+ * Remaining elements on both sides use outer_num.
+ * 
+ * time/space: O(n) / O(n)
+ *
+ * @param inner_dim dimension of the inner region.
+ * @param outer_dim dimension of the resulting kernel.
+ * @param inner_num value utilized by the inner region.
+ * @param outer_num value utilized by the outer region.
+ * @return allocated 1D kernel, or NULL if allocation fails
+ */
+float	*edge_kernel_1d(size_t inner_dim, size_t outer_dim,
+	float inner_num, float outer_num);
+
+/**
+ * Define the outer number for edge-detection/sharp convolution kernel.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * @param inner_dim dimension of the inner region.
+ * @param outer_dim dimension of the outer region.
+ * @param input value utilized by the inner region.
+ * @param kernel_sum if kernel_sum = 1 means sharp, 0 means edge detection.
+ * @return value utilized by the outer region.
+ * @see Image convolution tutorial https://www.youtube.com/live/8rrHTtUzyZA?si=UZVlq0cpb2X95MZN
+ * for more details.
+ */
+float	define_outer_num(float inner_dim, float outer_dim, float input, float kernel_sum);
+
+/**
+ * Create a square edge-detection/sharp convolution kernel.
+ * The resulting kernel has odd dimensions, with a minimum dimension of 3.
+ * If inner_dim is greater than outer_dim, the dimensions are swapped.
+ * 
+ * time/space: O(n^2) / O(n^2)
+ * 
+ * status: public api
+ * 
+ * @param inner_dim dimension of the inner region.
+ * @param outer_dim dimension of the resulting square kernel.
+ * @param input value utilized by the inner region.
+ * @param kernel_sum if kernel_sum = 1 means sharp, 0 means edge detection.
+ * @return allocated square edge kernel, or NULL if allocation fails
+ * @see Image convolution tutorial https://www.youtube.com/live/8rrHTtUzyZA?si=UZVlq0cpb2X95MZN
+ * for more details.
+ */
+float	*edge_kernel(size_t inner_dim, size_t outer_dim, float input, float kernel_sum);
 
 /* ************************************************************************** */
 /* *** src/editor/evenodd/ *** */
@@ -1347,51 +1411,370 @@ void		color_cells_gradient(t_table_fdf *dst,
 				t_gradient gradient_input, bool is_overwrite);
 
 /**
- * Set each cell to the Euclidean distance of its standard coordinates.
- *
- * time/space: O(n) / O(1)
- *
- * @param dst FDF table to modify
+ * Paint a table FDF channel using the value of each cell from
+ * the origin in the complex plane, as |z.re + z.im|.
+ * If cell_metric is not NULL, its output will be utilized instead
+ * of the default complex-plane distance.
+ * 
+ * time/space: O(n) + O(cell_metric) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst destination FDF table to paint
+ * @param channel FDF channel to paint
+ * @param cell_metric optional function to calculate the value of each cell
  */
-void		space_coloring_pythagorus(t_table_fdf *dst);
+void	paint_space(t_table_fdf *dst, t_fdf_channel channel,
+	int (*cell_metric)(const t_table_fdf *dst, size_t index));
 
 /**
- * Set each cell to the square root of the product of its standard
- * complex coordinate components.
- *
- * time/space: O(n) / O(1)
- *
- * @param dst FDF table to modify
+ * Calculate the difference between the sum of the absolute
+ * components and the absolute value of their sum.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return |re| + |im| + |zd3| - |re + im + zd3|
  */
-void		space_coloring_root_xy(t_table_fdf *dst);
+int	cell_metric_triangle_inequality_3d(const t_table_fdf *dst, size_t index);
 
 /**
- * Set each cell to the sum of its standard
- * complex coordinate components.
- *
- * time/space: O(n) / O(1)
- *
- * @param dst FDF table to modify
- */
-void		space_coloring_x_plus_y(t_table_fdf *dst);
+* Calculate the Euclidean distance of a cell from the origin
+* in the 3d space
+* 
+* time/space: O(1) / O(1)
+* 
+* status: public api
+* 
+* @param dst source FDF table
+* @param index index of the cell
+* @return Euclidean distance from the origin
+*/
+int	cell_metric_pythagoras_3d(const t_table_fdf *dst, size_t index);
 
 /**
- * Set each cell to the maximum of its standard coordinate components.
- *
- * time/space: O(n) / O(1)
- *
- * @param dst FDF table to modify
+ * Calculate the maximum absolute component of a cell coordinate
+ * in 3d space.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return maximum of |re|, |im|, and zd3
  */
-void		space_coloring_max_xy(t_table_fdf *dst);
+int	cell_metric_max_xyz(const t_table_fdf *dst, size_t index);
 
 /**
- * Set each cell to the minimum of its standard coordinate components.
- *
- * time/space: O(n) / O(1)
- *
- * @param dst FDF table to modify
+ * Calculate the square root of the absolute product of the
+ * real and imaginary components of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return sqrt(|re * im|)
  */
-void		space_coloring_min_xy(t_table_fdf *dst);
+int	cell_metric_root_xyz(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the absolute value of the sum of x, y, and z.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return |x + y + z|
+ */
+int	cell_metric_addsub_3d(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the difference between the sum of the absolute
+ * components and the absolute value of their sum.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return |re| + |im| - |re + im|
+ */
+int	cell_metric_triangle_inequality(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the different between (x + y) / 2 - (xy)^(1/2)
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return (x + y) / 2 - (xy)^(1/2)
+ */
+int	cell_metric_amgm_inequality(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the (x + y + z) / 3 - (xyz)^(1/3)
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return (x + y + z) / 3 - (xyz)^(1/3)
+ */
+int	cell_metric_amgm_inequality_3d(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the (re + im)^2
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return (re + im)^2
+ */
+int	cell_metric_x_plus_y_square(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the x^2 + y^2 + z^2 - (x + y + z)^2
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return x^2 + y^2 + z^2 - (x + y + z)^2
+ */
+int	cell_metric_cauchy_schwarz_inequality_3d(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the minimum absolute component of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return minimum of |re| and |im|
+ */
+int	cell_metric_min_xy(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the minimum absolute component of a cell coordinate
+ * in 3d space.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return minimum of |re|, |im|, and zd3
+ */
+int	cell_metric_min_xyz(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the minimum cosine value of the real and imaginary
+ * components of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return min(row, col) * min(cos(re / a), cos(im / a))
+ */
+int	cell_metric_mincos(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the minimum component of the complex cosine of a
+ * cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * 
+ * @param index index of the cell
+ * 
+ * @return min(cos(z).re, cos(z).im)
+ */
+int	cell_metric_minecos(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the minimum component of the complex exponential
+ * of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return min(re(exp(z)), im(exp(z)))
+ */
+int	cell_metric_minexp(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the maximum sine value of the real and imaginary
+ * components of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return min(row, col) * max(sin(re / a), sin(im / a))
+ */
+int	cell_metric_maxsin(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the maximum component of the complex sine of a
+ * cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * 
+ * @param index index of the cell
+ * 
+ * @return max(sin(z).re, sin(z).im)
+ */
+int	cell_metric_maxesin(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the maximum cosine value of the real and imaginary
+ * components of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return min(row, col) * max(cos(re / a), cos(im / a))
+ */
+int	cell_metric_maxcos(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the maximum component of the complex cosine of a
+ * cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * 
+ * @param index index of the cell
+ * 
+ * @return max(cos(z).re, cos(z).im)
+ */
+int	cell_metric_maxecos(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the maximum component of the complex exponential
+ * of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return max(re(exp(z)), im(exp(z)))
+ */
+int	cell_metric_maxexp(const t_table_fdf *dst, size_t index);
+
+/**
+* Calculate the Euclidean distance of a cell from the origin
+* in the complex plane.
+* 
+* time/space: O(1) / O(1)
+* 
+* status: public api
+* 
+* @param dst source FDF table
+* @param index index of the cell
+* @return Euclidean distance from the origin
+*/
+int	cell_metric_pythagoras(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the maximum absolute component of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return maximum of |re| and |im|
+ */
+int	cell_metric_max_xy(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the absolute value of the sum of the real and
+ * imaginary components of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return |re + im|
+ */
+int	cell_metric_addsub(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the square root of the absolute product of the
+ * real and imaginary components of a cell coordinate.
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return sqrt(|re * im|)
+ */
+int	cell_metric_root_xy(const t_table_fdf *dst, size_t index);
+
+/**
+ * Calculate the a^3 + b^3 - c^3 where a,b,c are integer and c is the
+ * floor 3rd root of a^3 + b^3
+ * 
+ * time/space: O(1) / O(1)
+ * 
+ * status: public api
+ * 
+ * @param dst source FDF table
+ * @param index index of the cell
+ * @return a^3 + b^3 - floor((a^3 + b^3)^(1/3))
+ */
+int	cell_metric_fermat_theorem(const t_table_fdf *dst, size_t index);
 
 /* ************************************************************************** */
 /* *** src/graphic_mlx/raster/ *** */
