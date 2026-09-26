@@ -1,7 +1,7 @@
 Fan Art List
 1.	3B1B
 *	word:	i j k = -1
-*	font:	Georgiall
+*	font:	Georgia11
 *	color:	?
 2.	Dandadan
 *	word:	Dandadan

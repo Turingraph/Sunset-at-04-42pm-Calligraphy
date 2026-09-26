@@ -1,11 +1,12 @@
 CC = cc -Wall -Wextra -Werror
 SRC_motif = $(wildcard improvise/motif/*.c)
 SRC_wood = $(wildcard improvise/wood/*.c)
+SRC_quantum_spirit = $(wildcard improvise/quantum_spirit/*.c)
 SRC_non_euclidean = $(wildcard improvise/non_euclidean/*.c)
 SRC_suisei = $(wildcard fanart/suisei/*.c)
 SRC_zutomayo = $(wildcard fanart/zutomayo/*.c)
 # SRC_3b1b = $(wildcard fanart/3b1b/*.c)
-SRC_improvise = $(SRC_non_euclidean) $(SRC_wood) $(SRC_motif)
+SRC_improvise = $(SRC_non_euclidean) $(SRC_wood) $(SRC_motif) $(SRC_quantum_spirit)
 SRC_fanart = $(SRC_zutomayo) $(SRC_suisei)
 SRC_artworks = $(SRC_fanart) $(SRC_improvise)
 
