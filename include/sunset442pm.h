@@ -21,7 +21,7 @@
 # include <fcntl.h>
 
 /* ************************************************************************** */
-/* src/utils/type/type.h */
+/* src/utils/shape_2d/shape_2d.h */
 /* ************************************************************************** */
 
 /**
@@ -343,7 +343,7 @@ typedef enum t_load_warning
  * If int_warn and/or rgb_warn are NOT_DECIMAL and/or NOT_HEX, then 
  * load_all_fdf_lines stops and open_table_fdf_file return empty output.
  *
- * status: internal data type
+ * status: internal data shape_2d
  *
  * @param arr array containing the parsed height values
  * @param r array containing the red color components
@@ -377,7 +377,7 @@ typedef struct t_load_fdf
  *
  * time/space: O(1) / O(1) for the structure itself.
  * 
- * status: internal data type
+ * status: internal data shape_2d
  *
  * @param arr dynamic array of loaded FDF data
  * @param length number of t_load_fdf elements currently stored
@@ -476,8 +476,6 @@ t_load_fdf	parse_ascii_line_chungaloider(char *line);
  *
  * time/space: O(n) / O(n)
  *
- * status: public api
- * 
  * @param line input line
  * 
  * @return loaded data input array as t_load_fdf
@@ -493,8 +491,6 @@ t_load_fdf	parse_fdf_line_rgba(char *line);
  *
  * time/space: O(n) / O(n)
  *
- * status: public api
- * 
  * @param line input line
  * 
  * @return loaded data input array as t_load_fdf
@@ -756,8 +752,6 @@ void			write_table_fdf(int fd,
  *
  * time/space: O(n * m^2) / O(n)
  * 
- * status: public api (unchecked)
- *
  * @param src source FDF table
  * @param kernel convolution kernel.
  * @param dim the dimension (number of row and column) of the square kernel.
@@ -838,8 +832,6 @@ float	define_outer_num(float inner_dim, float outer_dim, float input, float kern
  * If inner_dim is greater than outer_dim, the dimensions are swapped.
  * 
  * time/space: O(n^2) / O(n^2)
- * 
- * status: public api
  * 
  * @param inner_dim dimension of the inner region.
  * @param outer_dim dimension of the resulting square kernel.
@@ -1223,8 +1215,6 @@ bool		is_oddlength_x3shadow(const t_table_fdf *dst, size_t index);
  *
  * time/space: O(1) / O(1)
  *
- * status: public api
- *
  * @param dst FDF table to check
  * @param index index of the cell to check
  *
@@ -1236,8 +1226,6 @@ bool	is_andmod_x2shadow(const t_table_fdf *dst, size_t index);
  * Check whether the ax^3 and ay^3 of the cell is an odd value.
  *
  * time/space: O(1) / O(1)
- *
- * status: public api
  *
  * @param dst FDF table to check
  * @param index index of the cell to check
@@ -1418,8 +1406,6 @@ void		color_cells_gradient(t_table_fdf *dst,
  * 
  * time/space: O(n) + O(cell_metric) / O(1)
  * 
- * status: public api
- * 
  * @param dst destination FDF table to paint
  * @param channel FDF channel to paint
  * @param cell_metric optional function to calculate the value of each cell
@@ -1433,8 +1419,6 @@ void	paint_space(t_table_fdf *dst, t_fdf_channel channel,
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return |re| + |im| + |zd3| - |re + im + zd3|
@@ -1446,8 +1430,6 @@ int	cell_metric_triangle_inequality_3d(const t_table_fdf *dst, size_t index);
 * in the 3d space
 * 
 * time/space: O(1) / O(1)
-* 
-* status: public api
 * 
 * @param dst source FDF table
 * @param index index of the cell
@@ -1461,8 +1443,6 @@ int	cell_metric_pythagoras_3d(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return maximum of |re|, |im|, and zd3
@@ -1475,8 +1455,6 @@ int	cell_metric_max_xyz(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return sqrt(|re * im|)
@@ -1487,8 +1465,6 @@ int	cell_metric_root_xyz(const t_table_fdf *dst, size_t index);
  * Calculate the absolute value of the sum of x, y, and z.
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * @param index index of the cell
@@ -1502,8 +1478,6 @@ int	cell_metric_addsub_3d(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return |re| + |im| - |re + im|
@@ -1514,8 +1488,6 @@ int	cell_metric_triangle_inequality(const t_table_fdf *dst, size_t index);
  * Calculate the different between (x + y) / 2 - (xy)^(1/2)
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * @param index index of the cell
@@ -1528,8 +1500,6 @@ int	cell_metric_amgm_inequality(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return (x + y + z) / 3 - (xyz)^(1/3)
@@ -1540,8 +1510,6 @@ int	cell_metric_amgm_inequality_3d(const t_table_fdf *dst, size_t index);
  * Calculate the (re + im)^2
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * @param index index of the cell
@@ -1554,8 +1522,6 @@ int	cell_metric_x_plus_y_square(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return x^2 + y^2 + z^2 - (x + y + z)^2
@@ -1566,8 +1532,6 @@ int	cell_metric_cauchy_schwarz_inequality_3d(const t_table_fdf *dst, size_t inde
  * Calculate the minimum absolute component of a cell coordinate.
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * @param index index of the cell
@@ -1581,8 +1545,6 @@ int	cell_metric_min_xy(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return minimum of |re|, |im|, and zd3
@@ -1595,8 +1557,6 @@ int	cell_metric_min_xyz(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return min(row, col) * min(cos(re / a), cos(im / a))
@@ -1608,8 +1568,6 @@ int	cell_metric_mincos(const t_table_fdf *dst, size_t index);
  * cell coordinate.
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * 
@@ -1625,8 +1583,6 @@ int	cell_metric_minecos(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return min(re(exp(z)), im(exp(z)))
@@ -1639,8 +1595,6 @@ int	cell_metric_minexp(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return min(row, col) * max(sin(re / a), sin(im / a))
@@ -1652,8 +1606,6 @@ int	cell_metric_maxsin(const t_table_fdf *dst, size_t index);
  * cell coordinate.
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * 
@@ -1669,8 +1621,6 @@ int	cell_metric_maxesin(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return min(row, col) * max(cos(re / a), cos(im / a))
@@ -1682,8 +1632,6 @@ int	cell_metric_maxcos(const t_table_fdf *dst, size_t index);
  * cell coordinate.
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * 
@@ -1699,8 +1647,6 @@ int	cell_metric_maxecos(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return max(re(exp(z)), im(exp(z)))
@@ -1713,8 +1659,6 @@ int	cell_metric_maxexp(const t_table_fdf *dst, size_t index);
 * 
 * time/space: O(1) / O(1)
 * 
-* status: public api
-* 
 * @param dst source FDF table
 * @param index index of the cell
 * @return Euclidean distance from the origin
@@ -1725,8 +1669,6 @@ int	cell_metric_pythagoras(const t_table_fdf *dst, size_t index);
  * Calculate the maximum absolute component of a cell coordinate.
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * @param index index of the cell
@@ -1740,8 +1682,6 @@ int	cell_metric_max_xy(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return |re + im|
@@ -1754,8 +1694,6 @@ int	cell_metric_addsub(const t_table_fdf *dst, size_t index);
  * 
  * time/space: O(1) / O(1)
  * 
- * status: public api
- * 
  * @param dst source FDF table
  * @param index index of the cell
  * @return sqrt(|re * im|)
@@ -1767,8 +1705,6 @@ int	cell_metric_root_xy(const t_table_fdf *dst, size_t index);
  * floor 3rd root of a^3 + b^3
  * 
  * time/space: O(1) / O(1)
- * 
- * status: public api
  * 
  * @param dst source FDF table
  * @param index index of the cell
@@ -1783,12 +1719,12 @@ int	cell_metric_fermat_theorem(const t_table_fdf *dst, size_t index);
 /**
  * Describes the rendering properties of a 2D motif or FDF drawing.
  * 
- * color stores the 32-bit drawing color. type determines how the associated
+ * color stores the 32-bit drawing color. shape_2d determines how the associated
  * geometry or FDF data is rendered. thickness controls the size of the
  * rendered primitive where applicable.
  * 
  * @param color 32-bit drawing color
- * @param thickness size parameter used by the selected rendering type
+ * @param thickness size parameter used by the selected rendering shape_2d
  */
 typedef struct s_ink32
 {
@@ -1797,14 +1733,33 @@ typedef struct s_ink32
 }	t_ink32;
 
 /**
+ * Supported 2D motif and rendering types.
+ * 
+ * The type determines how the motif geometry or FDF data is interpreted
+ * by the raster layer.
+ * 
+ * ENUM TYPE
+ * 
+ * - E_RECTANGLE draws rectangular geometry.
+ * 
+ * - E_CIRCLE draws circular geometry.
+ * 
+ * - E_LINE draws polygon edges as lines.
+ */
+typedef enum t_2d_shape
+{
+	E_RECTANGLE,
+	E_CIRCLE,
+	E_LINE,
+}	t_2d_shape;
+
+/**
  * Pack individual RGBA channels into a 32-bit color value.
  *
  * The channels are packed in RGBA order, with red as the most
  * significant byte and alpha as the least significant byte.
  *
  * time/space: O(1) / O(1)
- *
- * status: public api
  *
  * @param r red channel value
  * @param g green channel value
@@ -2004,50 +1959,20 @@ t_complex	projection_wave(float x, float y, float z);
 /* ************************************************************************** */
 
 /*
- * This control how to display Fdf object.
- * It is based on the name of my favorite creators.
- * 
- * E_PICASSO = straight line
- * E_TOBY_FOX = Pixel art inspired grids
- * E_TUYOKI = Pixel art inspired grids (sometimes smaller than Toby Fox's grid)
- * E_KUSAMA = circle
- * E_EULER = E_PICASSO + E_KUSAMA = graph (without hole)
- * E_POINCARE = donut (circle with hole)
- * E_DIJKSTRA = E_POINCARE + E_EULER = network (same as Euler but have hole)
- * E_PIET_MONDRIAN = 4 rectangles on each cells
- * E_WARHOL = E_TOBY_FOX + E_PICASSO
- * E_HIROHIKO_ARAKI = E_TOBY_FOX + E_DIJKSTRA (inspired by Jojo's Stand)
- */
-typedef enum t_art_style
-{
-	E_PICASSO,
-	E_TOBY_FOX,
-	E_TUYOKI,
-	E_KUSAMA,
-	E_EULER,
-	E_POINCARE,
-	E_DIJKSTRA,
-	E_PIET_MONDRIAN,
-	E_WARHOL,
-	E_HIROHIKO_ARAKI,
-}	t_art_style;
-
-/*
  * This struct control the drawing style of the Fdf.
  */
 typedef struct s_render_style
 {
-	int32_t		background_color;
-	size_t		line_thickness;
-	t_art_style	artist;
-}	t_render_style;
+	size_t		thickness;
+	t_2d_shape	shape_2d;
+}	t_fdf_render;
 
 /* ************************************************************************** */
 /* *** src/graphic_mlx/window/ *** */
 /* ************************************************************************** */
 
 /**
- * Display an FDF object in an interactive 1920x1080 MLX window.
+ * Display an FDF object in an interactive a 1920x1080 MLX window.
  *
  * The FDF object is scaled to fit the viewing area.
  * The drawing style controls how the FDF object is
@@ -2061,10 +1986,10 @@ typedef struct s_render_style
  * 
  * - "ESC" = close the MLX window
  * 
- * - "Q" = reset FDF object
+ * - "Q" = reset 3D Fdf object
  * 
  * - "Left", "Right", "Up", "Down" = Panning the
- * FDF Object on 2D screen accordingly.
+ * 3D Fdf Object on 2D screen accordingly.
  * 
  * - "9" = Zoom in
  * 
@@ -2074,9 +1999,11 @@ typedef struct s_render_style
  *
  * @param fdf FDF object to display.
  * The default color of the FDF object is black.
- * @param artstyle style used to render the FDF object.
+ * @param fdf_render style used to render the FDF object.
+ * @param background_color the background color of the window scene.
  */
-void	view_fdf(t_fdf *fdf, t_render_style artstyle);
+void	view_fdf(t_fdf *fdf, t_fdf_render fdf_render,
+			int32_t background_color);
 
 /* ************************************************************************** */
 /* *** src/graphic_mlx/motif/ *** */
@@ -2101,28 +2028,6 @@ typedef struct s_2d_polygon
 }	t_2d_polygon;
 
 /**
- * Supported 2D motif and rendering types.
- * 
- * The type determines how the motif geometry or FDF data is interpreted
- * by the raster layer.
- * 
- * ENUM TYPE
- * 
- * - E_RECTANGLE draws rectangular geometry.
- * 
- * - E_CIRCLE draws circular geometry.
- * 
- * - E_LINE draws polygon edges as lines.
- * 
- */
-typedef enum t_2d_shape
-{
-	E_RECTANGLE,
-	E_CIRCLE,
-	E_LINE,
-}	t_2d_shape;
-
-/**
  * Reusable 2D drawing motif composed of geometry and drawing properties.
  *
  * polygon provides the geometric data while ink describes how that geometry
@@ -2133,7 +2038,7 @@ typedef struct s_motif
 {
 	t_2d_polygon	polygon;
 	t_ink32			ink;
-	t_2d_shape		type;
+	t_2d_shape		shape_2d;
 }	t_motif;
 
 /**

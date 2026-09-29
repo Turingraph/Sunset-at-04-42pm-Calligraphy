@@ -66,7 +66,7 @@ int	main(int len, char **str)
 	t_table_fdf		table;
 	t_table_fdf		non_euclidean;
 	t_fdf			output;
-	t_render_style	style;
+	t_fdf_render	style;
 
 	if (len < 2)
 		return (0);
@@ -80,9 +80,8 @@ int	main(int len, char **str)
 	// scale_positive_fdf(&table);
 	non_euclidean = init_table_fdf(table.row, table.col, true);
 	paint_space(&non_euclidean, HEIGHT, cell_metric_pythagoras);
-	style.background_color = f_rgba_to_int32(70, 155, 178, 255);
-	style.line_thickness = 4;
-	style.artist = E_KUSAMA;
+	style.thickness = 4;
+	style.shape_2d = E_CIRCLE;
 	scale_multiplication_fdf(&table, -1.0, HEIGHT);
 	scale_positive_fdf(&table);
 	color_cells_gradient(&table, init_suisei(), true);
@@ -90,7 +89,7 @@ int	main(int len, char **str)
 	color_cells_gradient(&table, init_white_noise(), true);
 	scale_multiplication_fdf(&table, 1.0 / 25.0, HEIGHT);
 	output = init_fdf(&table, projection_cabinet, 1.0);
-	view_fdf(&output, style);
+	view_fdf(&output, style, f_rgba_to_int32(70, 155, 178, 255));
 	free_table_fdf(&table);
 	free_fdf(&output);
 	return (0);
