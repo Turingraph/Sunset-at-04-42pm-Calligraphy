@@ -89,5 +89,6 @@ int	main(int len, char **str)
 
 
 /*
-valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/zutomayo/view_pink_toby_fox.out fanart/zutomayo/input/convolve.txt
+valgrind --leak-check=full --show-leak-kinds=all
+./out/fanart/zutomayo/view_pink_toby_fox.out fanart/zutomayo/input/convolve.txt
 */

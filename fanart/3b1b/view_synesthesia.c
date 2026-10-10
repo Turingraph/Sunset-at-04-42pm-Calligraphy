@@ -51,7 +51,7 @@ t_gradient	init_j()
 	t_gradient	dst;
 
 	dst.cell_channel = D7_COL;
-	dst.input_start = 40;
+	dst.input_start = 38;
 	dst.input_end = 84;
 	dst.rgba_start.r = 255 - 255;
 	dst.rgba_start.g = 255 - 123;
@@ -87,7 +87,7 @@ t_gradient	init_equal()
 	t_gradient	dst;
 
 	dst.cell_channel = D7_COL;
-	dst.input_start = 165;
+	dst.input_start = 160;
 	dst.input_end = 230;
 	dst.rgba_start.r = 0;
 	dst.rgba_start.g = 0;
