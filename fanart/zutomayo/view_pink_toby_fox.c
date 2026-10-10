@@ -80,7 +80,7 @@ int	main(int len, char **str)
 	color_cells_gradient(&table, init_ztmy_timeleft(), true);
 	scale_multiplication_fdf(&table, 1.0 / 3.0, HEIGHT);
 	color_cells_gradient(&table, init_white_noise(), true);
-	output = init_fdf(&table, projection_isometric, 1.0);
+	output = init_fdf(&table, NULL, 1.0);
 	view_fdf(&output, style, f_rgba_to_int32(14, 9, 15, 255));
 	free_table_fdf(&table);
 	free_fdf(&output);

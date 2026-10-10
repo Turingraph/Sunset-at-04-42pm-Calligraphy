@@ -22,7 +22,7 @@ t_gradient	init_all()
 
 // time : O(1)
 // space: O(1)
-t_gradient	init_deep_wood()
+t_gradient	init_floor()
 {
 	t_gradient	dst;
 
@@ -69,7 +69,7 @@ int	main(void)
 	t_gradient		wood;
 	size_t			i;
 
-	wood = init_deep_wood();
+	wood = init_floor();
 	table = init_table_fdf(300, 300, true);
 	table_base = init_table_fdf(300, 300, false);
 	paint_space(&table, HEIGHT, cell_metric_amgm_inequality);

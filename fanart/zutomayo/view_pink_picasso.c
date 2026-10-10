@@ -74,7 +74,7 @@ int	main(int len, char **str)
 		free_table_fdf(&table);
 		return (0);
 	}
-	style.thickness = 3;
+	style.thickness = 1;
 	style.shape_2d = E_LINE;
 	color_cells_gradient(&table, init_ztmy_studyme(), true);
 	color_cells_gradient(&table, init_ztmy_timeleft(), true);
@@ -89,5 +89,6 @@ int	main(int len, char **str)
 
 /*
 valgrind --tool=callgrind ./out/fanart/zutomayo/view_pink_picasso.out fanart/zutomayo/input/convolve.txt
-valgrind --leak-check=full --show-leak-kinds=all ./out/fanart/zutomayo/view_pink_picasso.out fanart/zutomayo/input/convolve.txt
+valgrind --leak-check=full --show-leak-kinds=all 
+./out/fanart/zutomayo/view_pink_picasso.out fanart/zutomayo/input/convolve.txt
 */

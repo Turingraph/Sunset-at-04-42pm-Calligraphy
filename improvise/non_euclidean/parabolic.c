@@ -22,7 +22,7 @@ t_gradient	init_white_noise()
 
 // time : O(1)
 // space: O(1)
-t_gradient	init_deep_wood()
+t_gradient	init_floor()
 {
 	t_gradient	dst;
 
@@ -54,7 +54,7 @@ int	main(void)
 	table_fdf_hadamard(&table, &table_base, HEIGHT);
 	style.thickness = 2;
 	style.shape_2d = E_RECTANGLE;
-	color_cells_gradient(&table, init_deep_wood(), true);
+	color_cells_gradient(&table, init_floor(), true);
 	color_cells_gradient(&table, init_white_noise(), true);
 	scale_multiplication_fdf(&table, 1.0 / 120.0, HEIGHT);
 	output = init_fdf(&table, NULL, 0.6);
