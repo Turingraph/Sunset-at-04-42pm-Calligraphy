@@ -17,6 +17,7 @@ int	main(void)
 			parse_ascii_line_cheche01, false);
 	output_fd1 = open_dir_file(output_dir1, NULL, E_WRITE);
 	table_b = scale_dimension_fdf(&table_a, 3, 3);
+	scale_multiplication_fdf(&table_b, 3, HEIGHT);
 	write_table_ascii_cheche01(output_fd1, &table_b, HEIGHT);
 	output_fd = open_dir_file(output_dir, NULL, E_WRITE);
 	table_c = convolve_fdf(&table_b, NULL, half_dim);

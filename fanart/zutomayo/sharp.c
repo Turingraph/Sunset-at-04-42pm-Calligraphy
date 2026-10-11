@@ -9,7 +9,7 @@ int	main(void)
 	char		*output_dir = "fanart/zutomayo/input/sharp.txt";
 	float		*ker2;
 
-	ker2 = edge_kernel(1, 10, -1, 1);
+	ker2 = edge_kernel(1, 10, -1, 0);
 	table_a = open_table_fdf_file(input_dir, NULL,
 			parse_ascii_line_cheche01, false);
 	table_c = convolve_fdf(&table_a, ker2, 10);

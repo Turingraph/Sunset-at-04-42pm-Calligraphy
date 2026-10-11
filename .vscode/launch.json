@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/pc/Sunset-at-04-42pm-Calligraphy/fanart/zutomayo",
-      "program": "/home/pc/Sunset-at-04-42pm-Calligraphy/fanart/zutomayo/build/Debug/outDebug",
+      "cwd": "/home/pc/Sunset-at-04-42pm-Calligraphy/fanart/zutomayo2",
+      "program": "/home/pc/Sunset-at-04-42pm-Calligraphy/fanart/zutomayo2/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -48,7 +48,7 @@ t_gradient	init_ztmy_studyme()
 
 	dst.cell_channel = D7_HEIGHT;
 	dst.input_start = 0;
-	dst.input_end = 20;
+	dst.input_end = 60;
 	dst.rgba_start.r = 66;
 	dst.rgba_start.g = 54;
 	dst.rgba_start.b = 118;
@@ -65,6 +65,7 @@ int	main(int len, char **str)
 	t_table_fdf		table;
 	t_fdf			output;
 	t_fdf_render	style;
+	t_gradient		text_color;
 
 	if (len < 2)
 		return (0);
@@ -74,21 +75,27 @@ int	main(int len, char **str)
 		free_table_fdf(&table);
 		return (0);
 	}
-	style.thickness = 6;
-	style.shape_2d = E_RECTANGLE;
-	color_cells_gradient(&table, init_ztmy_studyme(), true);
+	style.thickness = 1;
+	style.shape_2d = E_LINE;
+	text_color = init_ztmy_studyme();
+	text_color.input_end = get_minmax_from_table_fdf(&table, true, HEIGHT) * 3 / 2;
+	// write(1, ">>> ", 4);
+	// ft_putnbr_fd(text_color.input_end, 1, "0123456789", 1);
+	// write(1, "\n", 1);
+	color_cells_gradient(&table, text_color, true);
 	color_cells_gradient(&table, init_ztmy_timeleft(), true);
-	scale_multiplication_fdf(&table, 1.0 / 3.0, HEIGHT);
+	scale_multiplication_fdf(&table, 1.0 / 9.0, HEIGHT);
 	color_cells_gradient(&table, init_white_noise(), true);
-	output = init_fdf(&table, NULL, 1.0);
-	view_fdf(&output, style, f_rgba_to_int32(14, 9, 15, 255));
+	output = init_fdf(&table, projection_isometric, 1.0);
+	view_fdf(&output, style, f_rgba_to_int32(0, 0, 0, 255));
+	// view_fdf(&output, style, f_rgba_to_int32(14, 9, 15, 255));
 	free_table_fdf(&table);
 	free_fdf(&output);
 	return (0);
 }
 
-
 /*
-valgrind --leak-check=full --show-leak-kinds=all
-./out/fanart/zutomayo/view_pink_toby_fox.out fanart/zutomayo/input/convolve.txt
+valgrind --tool=callgrind ./out/fanart/zutomayo/view_pink.out fanart/zutomayo/input/convolve.txt
+valgrind --leak-check=full --show-leak-kinds=all 
+./out/fanart/zutomayo/view_pink.out fanart/zutomayo/input/convolve.txt
 */
