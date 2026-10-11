@@ -78,8 +78,6 @@ int	main(int len, char **str)
 	// scale_positive_fdf(&table);
 	style.thickness = 5;
 	style.shape_2d = E_RECTANGLE;
-	scale_multiplication_fdf(&table, -1.0, HEIGHT);
-	scale_positive_fdf(&table);
 	color_cells_gradient(&table, init_suisei(), true);
 	color_cells_gradient(&table, init_caramel_pain(), true);
 	color_cells_gradient(&table, init_white_noise(), true);
@@ -93,5 +91,5 @@ int	main(int len, char **str)
 
 /*
 valgrind --leak-check=full --show-leak-kinds=all 
-./out/fanart/suisei/view_blue_tobyfox.out fanart/suisei/input/sharp_edit.txt
+./out/fanart/suisei/view_blue_tobyfox.out fanart/suisei/input/inverse_edit.txt
 */

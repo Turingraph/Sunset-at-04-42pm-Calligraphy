@@ -64,7 +64,6 @@ t_gradient	init_caramel_pain()
 int	main(int len, char **str)
 {
 	t_table_fdf		table;
-	t_table_fdf		non_euclidean;
 	t_fdf			output;
 	t_fdf_render	style;
 
@@ -78,12 +77,8 @@ int	main(int len, char **str)
 	}
 	// scale_multiplication_fdf(&table, -1, HEIGHT);
 	// scale_positive_fdf(&table);
-	non_euclidean = init_table_fdf(table.row, table.col, true);
-	paint_space(&non_euclidean, HEIGHT, cell_metric_pythagoras);
 	style.thickness = 4;
 	style.shape_2d = E_CIRCLE;
-	scale_multiplication_fdf(&table, -1.0, HEIGHT);
-	scale_positive_fdf(&table);
 	color_cells_gradient(&table, init_suisei(), true);
 	color_cells_gradient(&table, init_caramel_pain(), true);
 	color_cells_gradient(&table, init_white_noise(), true);
@@ -97,5 +92,5 @@ int	main(int len, char **str)
 
 /*
 valgrind --leak-check=full --show-leak-kinds=all 
-./out/fanart/suisei/view_blue_kusama.out fanart/suisei/input/sharp_edit.txt
+./out/fanart/suisei/view_blue_kusama.out fanart/suisei/input/inverse_edit.txt
 */
