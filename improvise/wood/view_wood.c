@@ -28,7 +28,7 @@ t_gradient	init_floor()
 
 	dst.cell_channel = D7_HEIGHT;
 	dst.input_start = 0;
-	dst.input_end = 10;
+	dst.input_end = 5;
 	dst.rgba_start.r = 126;
 	dst.rgba_start.g = 46;
 	dst.rgba_start.b = 3;
@@ -40,9 +40,9 @@ t_gradient	init_floor()
 	return (dst);
 }
 
-unsigned char red =   173 / 2;
-unsigned char green = 124 / 2;
-unsigned char blue =   68 / 2;
+unsigned char red =   30;
+unsigned char green = 15;
+unsigned char blue =  13;
 
 // time : O(1)
 // space: O(1)
@@ -83,7 +83,7 @@ int	main(int len, char **str)
 	}
 	color_cells_gradient(&table, init_all(), true);
 	style.thickness = 3;
-	style.shape_2d = E_LINE;
+	style.shape_2d = E_CIRCLE;
 	i = 0;
 	while (i < 24)
 	{
@@ -94,8 +94,8 @@ int	main(int len, char **str)
 	}
 	color_cells_gradient(&table, init_white_noise(), true);
 	scale_multiplication_fdf(&table, 1.0 / 10.0, HEIGHT);
-	output = init_fdf(&table, projection_isometric, 1.0);
-	view_fdf(&output, style, f_rgba_to_int32(0, 0, 0, 255));
+	output = init_fdf(&table, projection_cabinet, 0.6);
+	view_fdf(&output, style, f_rgba_to_int32(red, green, blue, 255));
 	free_table_fdf(&table);
 	free_fdf(&output);
 	return (0);
@@ -104,5 +104,7 @@ int	main(int len, char **str)
 /*
 valgrind --leak-check=full --show-leak-kinds=all 
 ./out/improvise/wood/view_wood.out fanart/zutomayo/input/convolve.txt
+./out/improvise/wood/view_wood.out improvise/wood/input/wood.txt
+./out/improvise/wood/view_wood.out fanart/3b1b/input/sharp_5.txt
 
 */

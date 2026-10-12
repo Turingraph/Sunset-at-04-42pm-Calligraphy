@@ -95,7 +95,7 @@ int	main(int len, char **str)
 }
 
 /*
-valgrind --tool=callgrind ./out/fanart/zutomayo/view_pink.out fanart/zutomayo/input/convolve.txt
+valgrind --tool=callgrind ./out/fanart/zutomayo/view_truth_in_lie.out fanart/zutomayo/input/convolve.txt
 valgrind --leak-check=full --show-leak-kinds=all 
-./out/fanart/zutomayo/view_pink.out fanart/zutomayo/input/convolve.txt
+./out/fanart/zutomayo/view_truth_in_lie.out fanart/zutomayo/input/convolve.txt
 */

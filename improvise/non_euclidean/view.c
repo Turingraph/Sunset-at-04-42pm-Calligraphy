@@ -1,0 +1,76 @@
+#include "../../include/sunset442pm.h"
+
+// time : O(1)
+// space: O(1)
+t_gradient	init_white_noise()
+{
+	t_gradient	dst;
+
+	dst.cell_channel = D7_HEIGHT;
+	dst.input_start = 0;
+	dst.input_end = 0;
+	dst.rgba_start.r = 0;
+	dst.rgba_start.g = 0;
+	dst.rgba_start.b = 0;
+	dst.rgba_start.a = 255;
+	dst.rgba_end.r = 0;
+	dst.rgba_end.g = 0;
+	dst.rgba_end.b = 0;
+	dst.rgba_end.a = 255;
+	return (dst);
+}
+
+// time : O(1)
+// space: O(1)
+t_gradient	init_floor()
+{
+	t_gradient	dst;
+
+	dst.cell_channel = D7_HEIGHT;
+	dst.input_start = 0;
+	dst.input_end = 200;
+	dst.rgba_start.r = 70;
+	dst.rgba_start.g = 75;
+	dst.rgba_start.b = 113;
+	dst.rgba_start.a = 255;
+	dst.rgba_end.r = 124;
+	dst.rgba_end.g = 213;
+	dst.rgba_end.b = 199;
+	dst.rgba_end.a = 255;
+	return (dst);
+}
+
+int	main(int len, char **str)
+{
+	t_table_fdf		table;
+	t_fdf			output;
+	t_fdf_render	style;
+	t_gradient		text_color;
+
+	if (len < 2)
+		return (0);
+	table = open_table_fdf_file(str[1], NULL, parse_ascii_line_cheche01, true);
+	if (table.col * table.row == 0)
+	{
+		free_table_fdf(&table);
+		return (0);
+	}
+	style.thickness = 3;
+	style.shape_2d = E_CIRCLE;
+	text_color = init_floor();
+	text_color.input_end = get_minmax_from_table_fdf(&table, true, HEIGHT) / 2;
+	color_cells_gradient(&table, text_color, true);
+	color_cells_gradient(&table, init_white_noise(), true);
+	scale_multiplication_fdf(&table, 1.0 / 120.0, HEIGHT);
+	output = init_fdf(&table, NULL, 0.6);
+	view_fdf(&output, style, f_rgba_to_int32(0, 0, 0, 255));
+	free_table_fdf(&table);
+	free_fdf(&output);
+	return (0);
+}
+
+/*
+valgrind --leak-check=full --show-leak-kinds=all
+./out/improvise/non_euclidean/view.out fanart/3b1b/input/sharp_5.txt
+
+*/

@@ -37,9 +37,9 @@ t_gradient	init_i()
 	dst.rgba_start.g = 0;
 	dst.rgba_start.b = 0;
 	dst.rgba_start.a = 255;
-	dst.rgba_end.r = 0;
-	dst.rgba_end.g = 0;
-	dst.rgba_end.b = 0;
+	dst.rgba_end.r = (255 - 238) / 3;
+	dst.rgba_end.g = (255 - 205) / 3;
+	dst.rgba_end.b = (255 - 154) / 3;
 	dst.rgba_end.a = 255;
 	return (dst);
 }
@@ -75,9 +75,9 @@ t_gradient	init_k()
 	dst.rgba_start.g = 255 -  40;
 	dst.rgba_start.b = 255 - 255;
 	dst.rgba_start.a = 255;
-	dst.rgba_end.r = 255 - 114;
-	dst.rgba_end.g = 255 -  40;
-	dst.rgba_end.b = 255 - 255;
+	dst.rgba_end.r = 114;
+	dst.rgba_end.g = 40;
+	dst.rgba_end.b = 70;
 	dst.rgba_end.a = 255;
 	return (dst);
 }
@@ -93,9 +93,9 @@ t_gradient	init_equal()
 	dst.rgba_start.g = 0;
 	dst.rgba_start.b = 0;
 	dst.rgba_start.a = 255;
-	dst.rgba_end.r = 0;
-	dst.rgba_end.g = 0;
-	dst.rgba_end.b = 0;
+	dst.rgba_end.r = (255 - 238) / 3;
+	dst.rgba_end.g = (255 - 205) / 3;
+	dst.rgba_end.b = (255 - 154) / 3;
 	dst.rgba_end.a = 255;
 	return (dst);
 }
@@ -126,14 +126,14 @@ t_gradient	init_one()
 
 	dst.cell_channel = D7_COL;
 	dst.input_start = 295;
-	dst.input_end = 500;
+	dst.input_end = 330;
 	dst.rgba_start.r = 255 - 114;
 	dst.rgba_start.g = 255 -  40;
 	dst.rgba_start.b = 255 - 255;
 	dst.rgba_start.a = 255;
-	dst.rgba_end.r = 255 - 114;
-	dst.rgba_end.g = 255 -  40;
-	dst.rgba_end.b = 255 - 255;
+	dst.rgba_end.r = 114;
+	dst.rgba_end.g = 40;
+	dst.rgba_end.b = 70;
 	dst.rgba_end.a = 255;
 	return (dst);
 }
