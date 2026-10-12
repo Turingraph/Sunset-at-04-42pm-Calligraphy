@@ -4,6 +4,10 @@ unsigned char red =   0;
 unsigned char green = 0;
 unsigned char blue =  0;
 
+unsigned char red2 =   0;
+unsigned char green2 = 0;
+unsigned char blue2 =  0;
+
 // time : O(1)
 // space: O(1)
 t_gradient	init_white_noise()
@@ -13,13 +17,13 @@ t_gradient	init_white_noise()
 	dst.cell_channel = D7_HEIGHT;
 	dst.input_start = 0;
 	dst.input_end = 0;
-	dst.rgba_start.r = red;
-	dst.rgba_start.g = green;
-	dst.rgba_start.b = blue;
+	dst.rgba_start.r = red2;
+	dst.rgba_start.g = green2;
+	dst.rgba_start.b = blue2;
 	dst.rgba_start.a = 255;
-	dst.rgba_end.r = red;
-	dst.rgba_end.g = green;
-	dst.rgba_end.b = blue;
+	dst.rgba_end.r = red2;
+	dst.rgba_end.g = green2;
+	dst.rgba_end.b = blue2;
 	dst.rgba_end.a = 255;
 	return (dst);
 }
@@ -49,6 +53,7 @@ int	main(int len, char **str)
 	t_table_fdf		table;
 	t_fdf			output;
 	t_fdf_render	style;
+	t_gradient		text_color;
 
 	if (len < 2)
 		return (0);
@@ -60,7 +65,9 @@ int	main(int len, char **str)
 	}
 	style.thickness = 3;
 	style.shape_2d = E_LINE;
-	color_cells_gradient(&table, init_3b1b(), true);
+	text_color = init_3b1b();
+	text_color.input_end = get_minmax_from_table_fdf(&table, true, HEIGHT);
+	color_cells_gradient(&table, text_color, true);
 	color_cells_gradient(&table, init_white_noise(), true);
 	scale_multiplication_fdf(&table, 1.0 / 13.0, HEIGHT);
 	output = init_fdf(&table, projection_cabinet, 1.0);
