@@ -105,7 +105,7 @@ int	main(int len, char **str)
 		return (0);
 	}
 	style.thickness = 3;
-	style.shape_2d = E_LINE;
+	style.shape_2d = E_CIRCLE;
 	color_cells_gradient(&table, init_white_noise(), true);
 	color_cells_gradient(&table, init_backroom(), true);
 	color_cells_gradient(&table, init_3b1b(), false);
