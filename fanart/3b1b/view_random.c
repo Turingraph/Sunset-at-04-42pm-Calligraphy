@@ -1,4 +1,5 @@
 #include "../../include/sunset442pm.h"
+#include <time.h>
 
 unsigned char red =   (15 + 50) / 2;
 unsigned char green = (20 + 50) / 2;
@@ -205,6 +206,7 @@ int	main(int len, char **str)
 	t_fdf_render	style;
 	t_gradient		text_i;
 
+	srand(time(NULL));
 	if (len < 2)
 		return (0);
 	table = open_table_fdf_file(str[1], NULL, parse_ascii_line_cheche01, true);
@@ -235,5 +237,5 @@ int	main(int len, char **str)
 }
 
 /*
-./out/fanart/3b1b/view_synesthesia.out fanart/3b1b/input/sharp_5.txt
+./out/fanart/3b1b/view_random.out fanart/3b1b/input/sharp_5.txt
 */
