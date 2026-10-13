@@ -77,7 +77,7 @@ int	main(int len, char **str)
 	}
 	// scale_multiplication_fdf(&table, -1, HEIGHT);
 	// scale_positive_fdf(&table);
-	style.thickness = 4;
+	style.thickness = 2;
 	style.shape_2d = E_CIRCLE;
 	color_cells_gradient(&table, init_suisei(), true);
 	color_cells_gradient(&table, init_caramel_pain(), true);

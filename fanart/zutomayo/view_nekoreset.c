@@ -89,7 +89,7 @@ int	main(int len, char **str)
 		return (0);
 	}
 	style.thickness = 3;
-	style.shape_2d = E_LINE;
+	style.shape_2d = E_RECTANGLE;
 	background = init_white_noise();
 	background.input_end = table.row;
 	color_cells_gradient(&table, background, true);
@@ -101,7 +101,7 @@ int	main(int len, char **str)
 	text_color.input_end = get_minmax_from_table_fdf(&table, true, HEIGHT);
 	color_cells_gradient(&table, text_color, true);
 	scale_multiplication_fdf(&table, 1.0 / 9.0, HEIGHT);
-	output = init_fdf(&table, projection_cabinet, 1.0);
+	output = init_fdf(&table, NULL, 1.0);
 	view_fdf(&output, style, f_rgba_to_int32(red, green, blue, 255));
 	// view_fdf(&output, style, f_rgba_to_int32(14, 9, 15, 255));
 	free_table_fdf(&table);

@@ -83,7 +83,7 @@ int	main(int len, char **str)
 	}
 	color_cells_gradient(&table, init_all(), true);
 	style.thickness = 3;
-	style.shape_2d = E_CIRCLE;
+	style.shape_2d = E_RECTANGLE;
 	i = 0;
 	while (i < 24)
 	{
@@ -94,7 +94,7 @@ int	main(int len, char **str)
 	}
 	color_cells_gradient(&table, init_white_noise(), true);
 	scale_multiplication_fdf(&table, 1.0 / 10.0, HEIGHT);
-	output = init_fdf(&table, projection_cabinet, 0.6);
+	output = init_fdf(&table, NULL, 0.6);
 	view_fdf(&output, style, f_rgba_to_int32(red, green, blue, 255));
 	free_table_fdf(&table);
 	free_fdf(&output);

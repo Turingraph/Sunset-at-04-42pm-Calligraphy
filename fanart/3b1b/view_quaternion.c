@@ -95,6 +95,7 @@ int	main(int len, char **str)
 	t_table_fdf		table;
 	t_fdf			output;
 	t_fdf_render	style;
+	t_gradient		text_color;
 
 	if (len < 2)
 		return (0);
@@ -106,7 +107,9 @@ int	main(int len, char **str)
 	}
 	style.thickness = 3;
 	style.shape_2d = E_CIRCLE;
-	color_cells_gradient(&table, init_white_noise(), true);
+	text_color = init_white_noise();
+	text_color.input_end = table.row;
+	color_cells_gradient(&table, text_color, true);
 	color_cells_gradient(&table, init_backroom(), true);
 	color_cells_gradient(&table, init_3b1b(), false);
 	color_cells_gradient(&table, init_white_noise2(), true);
