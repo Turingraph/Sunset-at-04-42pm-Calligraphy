@@ -79,9 +79,6 @@ int	main(int len, char **str)
 	style.shape_2d = E_RECTANGLE;
 	text_color = init_ztmy_studyme();
 	text_color.input_end = get_minmax_from_table_fdf(&table, true, HEIGHT) * 3 / 2;
-	// write(1, ">>> ", 4);
-	// ft_putnbr_fd(text_color.input_end, 1, "0123456789", 1);
-	// write(1, "\n", 1);
 	color_cells_gradient(&table, text_color, true);
 	color_cells_gradient(&table, init_ztmy_timeleft(), true);
 	scale_multiplication_fdf(&table, 1.0 / 9.0, HEIGHT);
